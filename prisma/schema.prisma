@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// TEMPORARILY DISABLED
+/*
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model HandyLaw {
+  id                Int      @id @default(autoincrement())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  clientName        String
+  insuranceCompany  String
+  accidentDate      String
+  accidentLocation  String
+  injuryDescription String
+  medicalTreatment  String
+  medicalBills      Float
+  lostWages         Float
+  painSuffering     String?
+  demandAmount      Float
+  caseType          String   @default("auto_accident")
+  injuryType        String   @default("soft_tissue")
+  jurisdiction      String?
+  includeVisuals    Boolean  @default(false)
+  hasPreExisting    Boolean  @default(false)
+  liabilityStrength String   @default("clear_fault")
+  letterContent     String   @db.Text
+  settlementAmount  Float?
+  settlementDate    DateTime?
+}
+
+model SettlementData {
+  id               Int      @id @default(autoincrement())
+  caseType         String
+  injuryType       String
+  medicalBills     Float
+  settlementAmount Float
+  jurisdiction     String?
+  description      String?
+} 
+*/ 

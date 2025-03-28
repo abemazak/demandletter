@@ -1,0 +1,12 @@
+model HistoricalLetter {
+  id              String   @id @default(cuid())
+  caseType        String
+  clientName      String
+  insuranceCompany String
+  accidentDate    DateTime
+  demandAmount    Float
+  settlementAmount Float?
+  letterContent   String   @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+} 

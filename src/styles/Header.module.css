@@ -1,0 +1,121 @@
+.header {
+  background-color: rgba(10, 10, 10, 0.9);
+  border-bottom: 1px solid var(--border-color);
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--secondary-color), transparent);
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  cursor: pointer;
+  position: relative;
+}
+
+.logoText {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  text-shadow: 0 0 10px rgba(157, 0, 255, 0.3);
+}
+
+.highlight {
+  color: var(--secondary-color);
+  position: relative;
+}
+
+.highlight::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--secondary-color);
+  box-shadow: 0 0 8px rgba(157, 0, 255, 0.5);
+}
+
+.smallText {
+  font-size: 0.9rem;
+  font-weight: 400;
+  opacity: 0.85;
+  color: var(--text-primary);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+}
+
+.navList {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+}
+
+.navList li {
+  position: relative;
+  cursor: pointer;
+}
+
+.navList li span {
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+
+.navList li:hover span {
+  color: var(--secondary-color);
+}
+
+.navList li::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--secondary-color);
+  transition: width 0.3s ease;
+  box-shadow: 0 0 8px rgba(157, 0, 255, 0.5);
+}
+
+.navList li:hover::after {
+  width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .headerContent {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .navList {
+    gap: 20px;
+  }
+} 

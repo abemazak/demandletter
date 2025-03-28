@@ -1,0 +1,601 @@
+.formContainer {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 40px;
+  border: 1px solid var(--border-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: var(--font-body);
+  background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.8), rgba(5, 5, 5, 0.9));
+  position: relative;
+  overflow: hidden;
+}
+
+.formContainer:hover {
+  box-shadow: 0 10px 30px rgba(157, 0, 255, 0.2);
+}
+
+.formContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--secondary-color), transparent);
+}
+
+.formGroup {
+  margin-bottom: 30px;
+  padding: 25px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.formGroup:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 30px rgba(157, 0, 255, 0.1);
+  border-color: rgba(157, 0, 255, 0.3);
+}
+
+.formGroup::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(to right, var(--secondary-dark), var(--secondary-color), var(--secondary-dark));
+  transition: width 0.5s ease;
+  opacity: 0;
+}
+
+.formGroup:hover::after {
+  width: 100%;
+  opacity: 1;
+}
+
+.formGroup h2 {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  color: var(--secondary-color);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: var(--font-heading);
+  text-shadow: 0 0 10px rgba(157, 0, 255, 0.5);
+}
+
+.formRow {
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.formRow label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  transition: color 0.2s ease;
+  letter-spacing: 0.5px;
+  font-family: var(--font-heading);
+}
+
+.formRow:hover label {
+  color: var(--secondary-color);
+  text-shadow: 0 0 8px rgba(157, 0, 255, 0.3);
+}
+
+.formRow input, 
+.formRow select, 
+.formRow textarea {
+  width: 100%;
+  padding: 15px;
+  background-color: rgba(18, 18, 18, 0.8);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+  font-family: var(--font-body);
+}
+
+.formRow input:focus, 
+.formRow select:focus, 
+.formRow textarea:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 2px rgba(157, 0, 255, 0.2), inset 0 2px 5px rgba(0, 0, 0, 0.2);
+  background-color: rgba(18, 18, 18, 0.95);
+  animation: focusPulse 2s infinite;
+}
+
+.formRow textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.formRow select {
+  background-color: rgba(18, 18, 18, 0.8);
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239d00ff'%3E%3Cpath d='M4 6h8L8 10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  padding-right: 40px;
+}
+
+.formRow input::placeholder,
+.formRow textarea::placeholder {
+  color: rgba(170, 170, 170, 0.6);
+  opacity: 0.6;
+  font-family: var(--font-body);
+}
+
+.moreOptionsButton {
+  background: none;
+  border: none;
+  color: var(--secondary-color);
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  padding: 5px 0;
+  text-align: left;
+  transition: all 0.2s ease;
+  font-family: var(--font-body);
+  position: relative;
+  display: inline-block;
+}
+
+.moreOptionsButton::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--secondary-color);
+  transition: width 0.3s ease;
+}
+
+.moreOptionsButton:hover {
+  text-shadow: 0 0 8px rgba(157, 0, 255, 0.5);
+  color: var(--secondary-color);
+}
+
+.moreOptionsButton:hover::after {
+  width: 100%;
+}
+
+.customFieldContainer {
+  overflow: hidden;
+  transition: height 0.3s ease, opacity 0.3s ease;
+}
+
+.twoColumns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  cursor: pointer;
+  padding: 3px 0;
+}
+
+.checkbox input {
+  margin-right: 12px;
+  width: auto;
+  accent-color: var(--secondary-color);
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+}
+
+.checkbox span {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  user-select: none;
+  font-family: var(--font-body);
+  transition: color 0.2s ease;
+}
+
+.checkbox:hover span {
+  color: var(--secondary-color);
+}
+
+.buttonRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.submitButton {
+  padding: 16px 40px;
+  background: linear-gradient(45deg, var(--secondary-dark), var(--secondary-color));
+  color: #ffffff;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(157, 0, 255, 0.4);
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.submitButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.submitButton:hover {
+  background: linear-gradient(45deg, var(--secondary-color), var(--secondary-light));
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(157, 0, 255, 0.5), 0 0 30px rgba(157, 0, 255, 0.3);
+}
+
+.submitButton:hover::before {
+  transform: translateX(100%);
+}
+
+.submitButton:active {
+  transform: translateY(1px);
+  box-shadow: 0 5px 15px rgba(157, 0, 255, 0.3);
+}
+
+.submitButton:disabled {
+  background-color: #555555;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.calculateButton {
+  padding: 10px 20px;
+  background-color: var(--card-background);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-left: 15px;
+  transition: all 0.2s ease;
+  font-family: var(--font-body);
+}
+
+.calculateButton:hover {
+  background-color: var(--secondary-color);
+  color: #000000;
+  border-color: var(--secondary-color);
+  box-shadow: 0 4px 15px rgba(157, 0, 255, 0.3);
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+}
+
+.suggestedDemand {
+  margin-top: 10px;
+  padding: 14px;
+  background-color: rgba(59, 130, 246, 0.15);
+  border-radius: var(--border-radius);
+  color: var(--secondary-color);
+  font-weight: bold;
+  border-left: 3px solid var(--secondary-color);
+  font-family: var(--font-body);
+}
+
+.error {
+  color: var(--accent-color);
+  margin-top: 25px;
+  text-align: center;
+  padding: 15px;
+  background-color: rgba(255, 45, 117, 0.15);
+  border-radius: var(--border-radius);
+  border-left: 3px solid var(--accent-color);
+  font-family: var(--font-body);
+  box-shadow: 0 4px 15px rgba(255, 45, 117, 0.1);
+  animation: errorPulse 2s infinite;
+}
+
+@keyframes errorPulse {
+  0% { box-shadow: 0 4px 15px rgba(255, 45, 117, 0.1); }
+  50% { box-shadow: 0 4px 20px rgba(255, 45, 117, 0.3); }
+  100% { box-shadow: 0 4px 15px rgba(255, 45, 117, 0.1); }
+}
+
+.resultContainer {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 40px;
+  border: 1px solid var(--border-color);
+  font-family: var(--font-body);
+  background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.8), rgba(5, 5, 5, 0.9));
+  position: relative;
+  overflow: hidden;
+}
+
+.resultContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--secondary-color), transparent);
+}
+
+.resultHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 35px;
+  flex-wrap: wrap;
+}
+
+.copyButton, .downloadButton, .backButton {
+  padding: 14px 28px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-family: var(--font-heading);
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.copyButton::before, .downloadButton::before, .backButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.copyButton:hover::before, .downloadButton:hover::before, .backButton:hover::before {
+  transform: translateX(100%);
+}
+
+.copyButton {
+  background-color: var(--card-background);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.downloadButton {
+  background-color: var(--secondary-color);
+  color: #000000;
+  box-shadow: 0 4px 15px rgba(157, 0, 255, 0.3);
+}
+
+.backButton {
+  background-color: var(--surface-color);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.copyButton:hover, .downloadButton:hover, .backButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.copyButton:hover {
+  background-color: rgba(30, 30, 30, 0.9);
+  border-color: var(--secondary-color);
+}
+
+.downloadButton:hover {
+  background-color: #b200ff;
+  box-shadow: 0 8px 20px rgba(157, 0, 255, 0.4);
+}
+
+.backButton:hover {
+  background-color: rgba(25, 25, 25, 0.9);
+  border-color: var(--secondary-color);
+}
+
+.letterContent {
+  white-space: pre-wrap;
+  background-color: rgba(18, 18, 18, 0.8);
+  color: var(--text-primary);
+  padding: 30px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  max-height: 600px;
+  overflow-y: auto;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.03em;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.letterContent:hover {
+  box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.3), 0 0 20px rgba(157, 0, 255, 0.1);
+  border-color: rgba(157, 0, 255, 0.3);
+}
+
+.strategyContainer {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 25px;
+  margin-top: 25px;
+  border: 1px solid var(--border-color);
+}
+
+.strategyContainer h2 {
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+  font-family: var(--font-heading);
+}
+
+.strategySection {
+  margin-bottom: 20px;
+}
+
+.strategySection h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: var(--secondary-color);
+  font-family: var(--font-heading);
+}
+
+.strategyStrength {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.strengthBar {
+  flex: 1;
+  height: 8px;
+  background-color: var(--surface-color);
+  border-radius: 4px;
+  margin-right: 10px;
+  overflow: hidden;
+}
+
+.strengthFill {
+  height: 100%;
+  background-color: var(--secondary-color);
+}
+
+.recommendationHighlight {
+  font-weight: bold;
+  color: var(--secondary-color);
+  margin-bottom: 8px;
+  font-family: var(--font-heading);
+}
+
+.exampleText {
+  font-style: italic;
+  background-color: var(--surface-color);
+  padding: 12px;
+  border-radius: var(--border-radius);
+  margin-top: 8px;
+  border-left: 3px solid var(--secondary-color);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  letter-spacing: 0.03em;
+}
+
+.defenseList {
+  list-style: none;
+  padding: 0;
+}
+
+.defenseList li {
+  margin-bottom: 12px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.defenseList li:before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--secondary-color);
+}
+
+.defenseItem {
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.counterStrategy {
+  padding: 8px;
+  margin-top: 5px;
+  font-size: 0.9rem;
+  background-color: #f2f2f2;
+  border-left: 3px solid var(--secondary-color);
+}
+
+.visualsList {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.visualsList li {
+  margin-bottom: 5px;
+}
+
+@media screen and (max-width: 768px) {
+  .twoColumns {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .formActions {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .resultHeader {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .actionButtons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .copyButton, .downloadButton, .backButton {
+    width: 100%;
+  }
+}
+
+/* Animated pulse on input focus */
+@keyframes focusPulse {
+  0% { box-shadow: 0 0 0 0 rgba(157, 0, 255, 0.7); }
+  70% { box-shadow: 0 0 0 6px rgba(157, 0, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(157, 0, 255, 0); }
+} 

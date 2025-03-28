@@ -1,0 +1,262 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  min-height: calc(100vh - 100px);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.title {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.subtitle {
+  color: var(--secondary-color);
+  font-size: 1.2rem;
+}
+
+.disclaimer {
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: var(--border-radius);
+  padding: 15px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 50px;
+  padding: 20px;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* Tab Navigation */
+.tabContainer {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 20px;
+}
+
+.tabButton {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  color: var(--dark-gray);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.tabButton:hover {
+  color: var(--secondary-color);
+}
+
+.activeTab {
+  color: var(--secondary-color);
+}
+
+.activeTab::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--secondary-color);
+}
+
+/* Strategy Guide Styles */
+.strategyGuideContainer {
+  font-size: 0.95rem;
+  color: var(--dark-gray);
+}
+
+.strategySection {
+  margin-bottom: 3rem;
+}
+
+.strategySection h2 {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.strategySubsection {
+  margin-bottom: 2rem;
+}
+
+.strategySubsection h3 {
+  font-size: 1.3rem;
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+
+.strategyBlock {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background-color: #f9fafb;
+  border-radius: var(--border-radius);
+}
+
+.strategyBlock h4 {
+  font-size: 1.1rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.strategyBlock h5 {
+  font-size: 1rem;
+  color: var(--dark-gray);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.strategyBlock ul {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.strategyBlock li {
+  margin-bottom: 0.5rem;
+}
+
+.evidenceGroup, .defenseGroup {
+  margin-bottom: 1.5rem;
+}
+
+.weightList {
+  list-style: none !important;
+  padding: 0 !important;
+}
+
+.weightItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem !important;
+}
+
+.weightLabel {
+  width: 150px;
+  font-weight: 500;
+}
+
+.weightBar {
+  flex: 1;
+  height: 12px;
+  background-color: #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 0 10px;
+}
+
+.weightFill {
+  height: 100%;
+  background-color: var(--secondary-color);
+}
+
+.weightValue {
+  width: 30px;
+  text-align: right;
+  font-weight: 500;
+}
+
+.toneCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.toneCard {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--border-radius);
+  background-color: white;
+}
+
+.toneCard h5 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.toneExample {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background-color: #f3f4f6;
+  border-radius: var(--border-radius);
+  font-style: italic;
+  color: var(--dark-gray);
+}
+
+.multiplierTable {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.multiplierHeader {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem;
+}
+
+.multiplierRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  padding: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.multiplierRow:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+  
+  .title {
+    font-size: 1.8rem;
+  }
+  
+  .toneCards {
+    grid-template-columns: 1fr;
+  }
+  
+  .multiplierTable {
+    font-size: 0.85rem;
+  }
+  
+  .multiplierHeader, .multiplierRow {
+    grid-template-columns: 1fr;
+  }
+  
+  .multiplierHeader div, .multiplierRow div {
+    padding: 0.5rem 0;
+  }
+} 

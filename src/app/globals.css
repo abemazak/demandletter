@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #000000;
+  --secondary-color: #9d00ff;
+  --accent-color: #ff2d75;
+  --secondary-light: #b200ff;
+  --secondary-dark: #7a00c2;
+  --background-color: #050505;
+  --surface-color: #121212;
+  --text-primary: #ffffff;
+  --text-secondary: #aaaaaa;
+  --border-color: #333333;
+  --border-radius: 10px;
+  --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --card-background: #0a0a0a;
+  --font-heading: 'acre', sans-serif;
+  --font-body: 'acre', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  font-family: var(--font-body);
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--background-color);
+  background-image: linear-gradient(to bottom right, #050505, #101010, #050505);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Subtle purple radial glow effect in the background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70vw;
+  height: 70vh;
+  background: radial-gradient(circle, rgba(157, 0, 255, 0.05) 0%, rgba(0, 0, 0, 0) 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, 
+input[type="submit"], 
+input[type="button"] {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+button:active, 
+input[type="submit"]:active, 
+input[type="button"]:active {
+  transform: translateY(1px);
+}
+
+input:focus, 
+select:focus, 
+textarea:focus {
+  outline: none;
+  border-color: var(--secondary-color) !important;
+  box-shadow: 0 0 0 2px rgba(157, 0, 255, 0.2) !important;
+}
+
+/* Modern scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--secondary-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+} 
