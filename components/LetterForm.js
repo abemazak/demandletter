@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import styles from '../styles/Form.module.css';
 
@@ -119,7 +119,8 @@ const accidentTypes = [
 ];
 
 export default function LetterForm({ onLetterGenerated }) {
-  const [formData, setFormData] = useState({
+  // Initialize form data with explicit types
+  const initialFormData = {
     clientName: '',
     clientState: '',
     insuranceCompany: '',
@@ -136,25 +137,60 @@ export default function LetterForm({ onLetterGenerated }) {
     demandAmount: '',
     priorInjuries: '',
     preExistingConditions: '',
+    preExistingDocumentation: '',
+    preExistingType: '',
     witnessInformation: '',
     policeReport: false,
     policeReportNumber: '',
     faultAdmission: false,
-    liabilityArgument: ''
-  });
+    liabilityArgument: '',
+    // Explicitly initialize as boolean
+    hasPreExisting: false
+  };
   
+  const [formData, setFormData] = useState(initialFormData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [focusedField, setFocusedField] = useState(null);
   const [showMoreAccidentTypes, setShowMoreAccidentTypes] = useState(false);
   const [showCustomAccidentType, setShowCustomAccidentType] = useState(false);
+  const [showDebug, setShowDebug] = useState(false);
+
+  // Log initial state for debugging
+  useEffect(() => {
+    console.log('Form data initialized:', formData);
+    console.log('hasPreExisting type:', typeof formData.hasPreExisting);
+  }, []);
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [id]: type === 'checkbox' ? checked : value
-    }));
+    
+    // Add console log for debugging
+    console.log(`Changing ${id} to: ${type === 'checkbox' ? checked : value}`);
+    
+    if (id === 'hasPreExisting' && type === 'checkbox') {
+      // Special handling for pre-existing checkbox
+      const newFormData = {
+        ...formData,
+        hasPreExisting: checked
+      };
+      
+      // Clear fields if unchecked
+      if (!checked) {
+        newFormData.preExistingConditions = '';
+        newFormData.preExistingType = '';
+        newFormData.preExistingDocumentation = '';
+        console.log('Clearing pre-existing fields');
+      }
+      
+      setFormData(newFormData);
+    } else {
+      // Default handler for other fields
+      setFormData(prevData => ({
+        ...prevData,
+        [id]: type === 'checkbox' ? checked : value
+      }));
+    }
     
     // Show custom accident type input if "Other" is selected
     if (id === 'accidentType' && value === 'Other') {
@@ -184,9 +220,17 @@ export default function LetterForm({ onLetterGenerated }) {
     try {
       // Process form data
       const processedData = { ...formData };
+      
+      // Ensure boolean fields are properly typed
+      processedData.hasPreExisting = formData.hasPreExisting === true;
+      processedData.policeReport = formData.policeReport === true;
+      processedData.faultAdmission = formData.faultAdmission === true;
+      
       if (formData.accidentType === 'Other') {
         processedData.accidentType = formData.customAccidentType;
       }
+      
+      console.log('Submitting form with hasPreExisting:', processedData.hasPreExisting);
       
       const response = await fetch('/api/generate-letter', {
         method: 'POST',
@@ -304,6 +348,114 @@ export default function LetterForm({ onLetterGenerated }) {
               }}
             />
           </div>
+          
+          <div className={styles.formRow}>
+            <motion.label 
+              htmlFor="hasPreExisting"
+              animate={{
+                color: focusedField === 'hasPreExisting' ? 'var(--secondary-color)' : 'var(--text-primary)'
+              }}
+            >
+              Pre-existing Conditions
+            </motion.label>
+            <div className={styles.checkbox}>
+              <motion.input 
+                type="checkbox" 
+                id="hasPreExisting" 
+                checked={formData.hasPreExisting}
+                onChange={handleChange}
+                onFocus={() => handleFocus('hasPreExisting')}
+                onBlur={handleBlur}
+              />
+              <span>Yes, client has pre-existing conditions</span>
+            </div>
+          </div>
+          
+          {formData.hasPreExisting && (
+            <motion.div 
+              className={styles.conditionalSection}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className={styles.formRow}>
+                <motion.label 
+                  htmlFor="preExistingType"
+                  animate={{
+                    color: focusedField === 'preExistingType' ? 'var(--secondary-color)' : 'var(--text-primary)'
+                  }}
+                >
+                  Type of Pre-existing Condition
+                </motion.label>
+                <motion.select
+                  id="preExistingType"
+                  value={formData.preExistingType || ''}
+                  onChange={handleChange}
+                  onFocus={() => handleFocus('preExistingType')}
+                  onBlur={handleBlur}
+                  whileFocus={{
+                    borderColor: 'var(--secondary-color)',
+                    boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.4)'
+                  }}
+                >
+                  <option value="">Select condition type</option>
+                  <option value="degenerative">Degenerative Condition</option>
+                  <option value="prior_injury">Prior Injury</option>
+                  <option value="chronic_illness">Chronic Illness</option>
+                  <option value="congenital">Congenital/Birth Condition</option>
+                  <option value="other">Other</option>
+                </motion.select>
+              </div>
+              
+              <div className={styles.formRow}>
+                <motion.label 
+                  htmlFor="preExistingConditions"
+                  animate={{
+                    color: focusedField === 'preExistingConditions' ? 'var(--secondary-color)' : 'var(--text-primary)'
+                  }}
+                >
+                  Describe Pre-existing Conditions
+                </motion.label>
+                <motion.textarea 
+                  id="preExistingConditions" 
+                  rows="3" 
+                  value={formData.preExistingConditions}
+                  onChange={handleChange}
+                  onFocus={() => handleFocus('preExistingConditions')}
+                  onBlur={handleBlur}
+                  placeholder="Please provide details about your pre-existing conditions including: diagnosis date, treating providers, symptoms before the accident, and how the accident affected these conditions"
+                  whileFocus={{
+                    borderColor: 'var(--secondary-color)',
+                    boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.4)'
+                  }}
+                ></motion.textarea>
+              </div>
+              
+              <div className={styles.formRow}>
+                <motion.label 
+                  htmlFor="preExistingDocumentation"
+                  animate={{
+                    color: focusedField === 'preExistingDocumentation' ? 'var(--secondary-color)' : 'var(--text-primary)'
+                  }}
+                >
+                  Medical Documentation
+                </motion.label>
+                <motion.textarea 
+                  id="preExistingDocumentation" 
+                  rows="2" 
+                  value={formData.preExistingDocumentation}
+                  onChange={handleChange}
+                  onFocus={() => handleFocus('preExistingDocumentation')}
+                  onBlur={handleBlur}
+                  placeholder="List any medical documentation/records that show the condition was asymptomatic before the accident or was worsened by the accident"
+                  whileFocus={{
+                    borderColor: 'var(--secondary-color)',
+                    boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.4)'
+                  }}
+                ></motion.textarea>
+              </div>
+            </motion.div>
+          )}
         </motion.div>
 
         <motion.div 
@@ -626,29 +778,6 @@ export default function LetterForm({ onLetterGenerated }) {
           variants={formGroupVariants}
         >
           <h2>Medical History</h2>
-          <div className={styles.formRow}>
-            <motion.label 
-              htmlFor="preExistingConditions"
-              animate={{
-                color: focusedField === 'preExistingConditions' ? 'var(--secondary-color)' : 'var(--text-primary)'
-              }}
-            >
-              Pre-existing Conditions
-            </motion.label>
-            <motion.textarea 
-              id="preExistingConditions" 
-              rows="2" 
-              value={formData.preExistingConditions}
-              onChange={handleChange}
-              onFocus={() => handleFocus('preExistingConditions')}
-              onBlur={handleBlur}
-              placeholder="List any pre-existing conditions that might be relevant"
-              whileFocus={{
-                borderColor: 'var(--secondary-color)',
-                boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.4)'
-              }}
-            ></motion.textarea>
-          </div>
           
           <div className={styles.formRow}>
             <motion.label 

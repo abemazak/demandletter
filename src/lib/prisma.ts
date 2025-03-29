@@ -21,9 +21,23 @@ const createMockPrismaClient = () => {
     handyLaw: {
       create: async (data: any) => {
         console.log('Mock Prisma: Creating HandyLaw entry', data);
+        
+        // Extract pre-existing condition fields
+        const {
+          preExistingConditions = '',
+          preExistingType = '',
+          preExistingDocumentation = '',
+          hasUploadedDocuments = false,
+          ...otherData
+        } = data.data;
+        
         return {
           id: Math.floor(Math.random() * 1000),
-          ...data.data,
+          ...otherData,
+          preExistingConditions,
+          preExistingType,
+          preExistingDocumentation,
+          hasUploadedDocuments,
           createdAt: new Date(),
           updatedAt: new Date()
         };
@@ -46,15 +60,37 @@ const createMockPrismaClient = () => {
         return [];
       }
     },
+    HistoricalLetter: {
+      create: async (data: any) => {
+        console.log('Mock Prisma: Creating HistoricalLetter entry', data);
+        return {
+          id: Math.floor(Math.random() * 1000).toString(),
+          ...data.data,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
+      },
+      findMany: async () => {
+        console.log('Mock Prisma: Finding HistoricalLetter entries');
+        return [];
+      }
+    },
     // Add a disconnect method to avoid errors
     $disconnect: async () => {
       console.log('Mock Prisma: Disconnecting');
+    },
+    // Add a function to cleanup uploads
+    cleanup: async () => {
+      console.log('Mock Prisma: Cleanup function called');
+      return true;
     }
   } as unknown as PrismaClient;
 };
 
 export const prisma = isPrismaDisabled 
-  ? createMockPrismaClient() 
+  ? (createMockPrismaClient() as unknown as PrismaClient)
   : (global.prisma || new PrismaClient());
 
-if (!isPrismaDisabled && process.env.NODE_ENV !== 'production') global.prisma = prisma; 
+if (process.env.NODE_ENV !== 'production') {
+  global.prisma = prisma as unknown as PrismaClient;
+} 

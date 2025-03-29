@@ -12,28 +12,31 @@ datasource db {
 }
 
 model HandyLaw {
-  id                Int      @id @default(autoincrement())
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  clientName        String
-  insuranceCompany  String
-  accidentDate      String
-  accidentLocation  String
-  injuryDescription String
-  medicalTreatment  String
-  medicalBills      Float
-  lostWages         Float
-  painSuffering     String?
-  demandAmount      Float
-  caseType          String   @default("auto_accident")
-  injuryType        String   @default("soft_tissue")
-  jurisdiction      String?
-  includeVisuals    Boolean  @default(false)
-  hasPreExisting    Boolean  @default(false)
-  liabilityStrength String   @default("clear_fault")
-  letterContent     String   @db.Text
-  settlementAmount  Float?
-  settlementDate    DateTime?
+  id                     Int      @id @default(autoincrement())
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  clientName             String
+  insuranceCompany       String
+  accidentDate           String
+  accidentLocation       String
+  injuryDescription      String
+  medicalTreatment       String
+  medicalBills           Float
+  lostWages              Float
+  painSuffering          String?
+  demandAmount           Float
+  caseType               String   @default("auto_accident")
+  injuryType             String   @default("soft_tissue")
+  jurisdiction           String?
+  includeVisuals         Boolean  @default(false)
+  hasPreExisting         Boolean  @default(false)
+  preExistingConditions  String?
+  preExistingType        String?
+  preExistingDocumentation String?
+  liabilityStrength      String   @default("clear_fault")
+  letterContent          String   @db.Text
+  settlementAmount       Float?
+  settlementDate         DateTime?
 }
 
 model SettlementData {

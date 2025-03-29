@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { deepseekApi, AnalysisRequest, AnalysisResponse } from '../utils/deepseekApi';
+import styles from '../styles/Form.module.css';
 
 interface FormData {
   [key: string]: string | number | boolean;
@@ -20,6 +21,7 @@ const FormAnalyzer: React.FC<FormAnalyzerProps> = ({
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState<boolean>(false);
 
   // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -33,6 +35,13 @@ const FormAnalyzer: React.FC<FormAnalyzerProps> = ({
           ? parseFloat(value) 
           : value
     }));
+  };
+
+  // Reset the form data
+  const resetForm = () => {
+    setFormData(initialFormData);
+    setResult(null);
+    setError(null);
   };
 
   // Analyze the form data using DeepSeek API
@@ -58,77 +67,180 @@ const FormAnalyzer: React.FC<FormAnalyzerProps> = ({
   };
 
   return (
-    <div className="p-6 max-w-2xl mx-auto bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-6">Form Data Analyzer</h2>
+    <div className={styles.formContainer}>
+      <h2 className={styles.formGroup}>Form Data Analyzer</h2>
       
       {/* Form Fields */}
-      <div className="space-y-4 mb-6">
-        {Object.keys(initialFormData).map((key) => (
-          <div key={key} className="flex flex-col">
-            <label className="mb-1 font-medium text-gray-700">
-              {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
-            </label>
-            <input
-              type={typeof initialFormData[key] === 'number' ? 'number' : 'text'}
-              name={key}
-              value={formData[key] as string | number}
-              onChange={handleInputChange}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+      <div className={styles.formGroup}>
+        <h2>Input Data</h2>
+        {Object.keys(initialFormData).length === 0 ? (
+          <div className={styles.formRow}>
+            <p>No initial form data provided. Please configure the component with form fields.</p>
           </div>
-        ))}
-      </div>
-
-      {/* Analysis Options */}
-      <div className="mb-6">
-        <label className="block mb-2 font-medium text-gray-700">Analysis Type</label>
-        <select
-          value={analysisType}
-          onChange={(e) => setAnalysisType(e.target.value as any)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="sentiment">Sentiment Analysis</option>
-          <option value="classification">Classification</option>
-          <option value="summary">Summary</option>
-          <option value="custom">Custom Analysis</option>
-        </select>
-        
-        {analysisType === 'custom' && (
-          <div className="mt-4">
-            <label className="block mb-2 font-medium text-gray-700">Custom Prompt</label>
-            <textarea
-              value={customPrompt}
-              onChange={(e) => setCustomPrompt(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              rows={4}
-              placeholder="Enter custom analysis prompt..."
-            />
-          </div>
+        ) : (
+          <>
+            <div className={styles.twoColumns}>
+              {Object.keys(initialFormData).slice(0, Math.ceil(Object.keys(initialFormData).length / 2)).map((key) => (
+                <div key={key} className={styles.formRow}>
+                  <label>
+                    {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
+                  </label>
+                  <input
+                    type={typeof initialFormData[key] === 'number' ? 'number' : 'text'}
+                    name={key}
+                    value={formData[key] as string | number}
+                    onChange={handleInputChange}
+                    placeholder={`Enter ${key.replace(/([A-Z])/g, ' $1').toLowerCase()}`}
+                  />
+                </div>
+              ))}
+              
+              {Object.keys(initialFormData).slice(Math.ceil(Object.keys(initialFormData).length / 2)).map((key) => (
+                <div key={key} className={styles.formRow}>
+                  <label>
+                    {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
+                  </label>
+                  <input
+                    type={typeof initialFormData[key] === 'number' ? 'number' : 'text'}
+                    name={key}
+                    value={formData[key] as string | number}
+                    onChange={handleInputChange}
+                    placeholder={`Enter ${key.replace(/([A-Z])/g, ' $1').toLowerCase()}`}
+                  />
+                </div>
+              ))}
+            </div>
+            
+            <button 
+              type="button"
+              className={styles.moreOptionsButton}
+              onClick={resetForm}
+            >
+              Reset to Default Values
+            </button>
+          </>
         )}
       </div>
 
+      {/* Analysis Options */}
+      <div className={styles.formGroup}>
+        <h2>Analysis Settings</h2>
+        <div className={styles.formRow}>
+          <label>Analysis Type</label>
+          <select
+            value={analysisType}
+            onChange={(e) => setAnalysisType(e.target.value as any)}
+          >
+            <option value="sentiment">Sentiment Analysis</option>
+            <option value="classification">Classification</option>
+            <option value="summary">Summary</option>
+            <option value="custom">Custom Analysis</option>
+          </select>
+        </div>
+        
+        <button 
+          type="button"
+          className={styles.moreOptionsButton}
+          onClick={() => setShowAdvancedOptions(!showAdvancedOptions)}
+        >
+          {showAdvancedOptions ? 'Hide Advanced Options' : 'Show Advanced Options'}
+        </button>
+        
+        <div className={styles.customFieldContainer} style={{ 
+          height: showAdvancedOptions ? 'auto' : '0',
+          opacity: showAdvancedOptions ? '1' : '0',
+          padding: showAdvancedOptions ? '20px 0 0' : '0'
+        }}>
+          {analysisType === 'custom' && (
+            <div className={styles.formRow}>
+              <label>Custom Prompt</label>
+              <textarea
+                value={customPrompt}
+                onChange={(e) => setCustomPrompt(e.target.value)}
+                rows={4}
+                placeholder="Enter custom analysis prompt..."
+              />
+            </div>
+          )}
+          
+          <div className={styles.formRow}>
+            <div className={styles.checkbox}>
+              <input 
+                type="checkbox" 
+                id="includeDataset" 
+                checked={!!referenceDataset}
+                readOnly
+              />
+              <span>Include reference dataset in analysis</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Analysis Button */}
-      <button
-        onClick={analyzeData}
-        disabled={loading}
-        className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50"
-      >
-        {loading ? 'Analyzing...' : 'Analyze Data'}
-      </button>
+      <div className={styles.actionButtons}>
+        <button
+          onClick={analyzeData}
+          disabled={loading}
+          className={styles.submitButton}
+        >
+          {loading ? 'Analyzing...' : 'Analyze Data'}
+        </button>
+        
+        {result && (
+          <button
+            onClick={resetForm}
+            className={styles.backButton}
+          >
+            Start New Analysis
+          </button>
+        )}
+      </div>
 
       {/* Error Message */}
       {error && (
-        <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+        <div className={styles.error}>
           {error}
         </div>
       )}
 
       {/* Analysis Results */}
       {result && (
-        <div className="mt-6">
-          <h3 className="text-xl font-semibold mb-3">Analysis Result</h3>
-          <div className="p-4 bg-gray-50 border border-gray-200 rounded-md">
+        <div className={styles.resultContainer}>
+          <div className={styles.resultHeader}>
+            <h3>Analysis Result</h3>
+          </div>
+          <div className={styles.letterContent}>
             <pre className="whitespace-pre-wrap">{typeof result === 'object' ? JSON.stringify(result, null, 2) : result}</pre>
+          </div>
+          
+          <div className={styles.actionButtons}>
+            <button 
+              className={styles.copyButton}
+              onClick={() => {
+                navigator.clipboard.writeText(typeof result === 'object' ? JSON.stringify(result, null, 2) : result);
+                alert('Result copied to clipboard!');
+              }}
+            >
+              Copy to Clipboard
+            </button>
+            
+            <button 
+              className={styles.downloadButton}
+              onClick={() => {
+                const blob = new Blob([typeof result === 'object' ? JSON.stringify(result, null, 2) : result], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `analysis-result-${new Date().toISOString().slice(0, 10)}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+              }}
+            >
+              Download Result
+            </button>
           </div>
         </div>
       )}

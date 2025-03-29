@@ -1,20 +1,20 @@
 {
-  "..\\app\\page.tsx -> ../components/GeneratedLetter.js": {
-    "id": "..\\app\\page.tsx -> ../components/GeneratedLetter.js",
+  "app\\page.tsx -> ../components/GeneratedLetter.js": {
+    "id": 1984,
     "files": [
-      "static/chunks/_app-pages-browser_src_components_GeneratedLetter_js.js"
+      "static/chunks/984.a14900c60db70c5b.js"
     ]
   },
-  "..\\app\\page.tsx -> ../components/LetterForm.js": {
-    "id": "..\\app\\page.tsx -> ../components/LetterForm.js",
+  "app\\page.tsx -> ../components/LetterForm.js": {
+    "id": 1553,
     "files": [
-      "static/chunks/_app-pages-browser_src_components_LetterForm_js.js"
+      "static/chunks/553.6b104c6aaa778721.js"
     ]
   },
-  "..\\components\\LetterForm.js -> ./StrategyRecommendations": {
-    "id": "..\\components\\LetterForm.js -> ./StrategyRecommendations",
+  "components\\LetterForm.js -> ./StrategyRecommendations": {
+    "id": 4898,
     "files": [
-      "static/chunks/_app-pages-browser_src_components_StrategyRecommendations_tsx.js"
+      "static/chunks/898.ebd9caa075c2b808.js"
     ]
   }
 }

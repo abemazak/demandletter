@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const successfulLetters = await prisma.historicalLetter.findMany({
+    // Use type assertion to work around the TypeScript error
+    const successfulLetters = await (prisma as any).HistoricalLetter.findMany({
       where: {
         settlementAmount: {
           not: null

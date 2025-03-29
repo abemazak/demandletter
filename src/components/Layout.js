@@ -4,12 +4,19 @@ import Header from './Header';
 import Footer from './Footer';
 import styles from '../styles/Layout.module.css';
 
-const Layout = ({ children, title = 'HandyLaw' }) => {
+const Layout = ({ 
+  children, 
+  title,
+  appName = 'HandyLaw',
+  description = 'Generate strategic, data-driven legal documents'
+}) => {
+  const pageTitle = title ? `${title} | ${appName}` : appName;
+  
   return (
     <>
       <Head>
-        <title>{title}</title>
-        <meta name="description" content="Generate strategic, data-driven legal documents" />
+        <title>{pageTitle}</title>
+        <meta name="description" content={description} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

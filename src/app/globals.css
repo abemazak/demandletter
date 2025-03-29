@@ -103,4 +103,31 @@ textarea:focus {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent-color);
+}
+
+/* Letter content styling */
+.letterContent,
+pre.letterContent,
+div.letterContent {
+  background-color: #fff !important;
+  color: #000 !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  display: block !important;
+  font-family: Arial, sans-serif !important;
+  line-height: 1.5 !important;
+  margin: 20px 0 !important;
+  padding: 30px !important;
+  border: 1px solid #ddd !important;
+  border-radius: 5px !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+/* Fix for hidden letter content */
+pre {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  background-color: #fff !important;
+  color: #333 !important;
 } 

@@ -160,4 +160,145 @@
     width: 100%;
     flex-wrap: wrap;
   }
+}
+
+/* Radio button group styles */
+.radioGroup {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 15px;
+}
+
+.radioOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.radioOption input[type="radio"] {
+  width: auto;
+  margin: 0;
+}
+
+.radioOption label {
+  margin-bottom: 0;
+  font-weight: normal;
+}
+
+.sectionLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--primary-color);
+}
+
+/* Select dropdown styles */
+.formRow select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  background-color: white;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 1em;
+}
+
+.formRow select:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Conditional fields styles */
+.conditionalSection {
+  border-left: 4px solid var(--secondary-color);
+  padding-left: 15px;
+  margin-bottom: 15px;
+  background-color: rgba(52, 152, 219, 0.05);
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.conditionalFields .formRow:first-child {
+  margin-top: 10px;
+}
+
+.conditionalFields .formRow:last-child {
+  margin-bottom: 5px;
+}
+
+/* Highlight for radio option when selected */
+.radioOption input[type="radio"]:checked + label {
+  color: var(--secondary-color);
+  font-weight: bold;
+}
+
+.fallbackControls {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px dashed #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+/* Pre-existing condition fields */
+.activeFields {
+  border-left: 4px solid var(--secondary-color);
+  padding-left: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: rgba(52, 152, 219, 0.05);
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.inactiveFields {
+  opacity: 0.6;
+  pointer-events: none;
+  filter: grayscale(1);
+  padding-left: 15px;
+  border-left: 4px solid #ccc;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+}
+
+/* Disabled form inputs */
+.formRow input:disabled,
+.formRow textarea:disabled,
+.formRow select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  color: #999;
+}
+
+/* Checkbox styling */
+.checkbox {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.checkbox span {
+  font-size: 0.95rem;
+}
+
+/* Highlight for checkbox when checked */
+.checkbox input[type="checkbox"]:checked + span {
+  color: var(--secondary-color);
+  font-weight: bold;
 } 

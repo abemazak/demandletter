@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { apiConfig } from '../config/api-config';
 
 // Types
 export interface AnalysisRequest {
@@ -17,11 +18,15 @@ export interface AnalysisResponse {
 export class DeepSeekAPI {
   private apiKey: string;
   private apiUrl: string;
+  private models: Record<string, string>;
+  private defaultParams: Record<string, any>;
 
   constructor() {
-    // Load from environment variables
+    // Load from environment variables with fallback to config
     this.apiKey = process.env.DEEPSEEK_API_KEY || '';
-    this.apiUrl = process.env.DEEPSEEK_API_URL || 'https://api.deepseek.com/v1';
+    this.apiUrl = process.env.DEEPSEEK_API_URL || apiConfig.deepseek.apiUrl;
+    this.models = apiConfig.deepseek.models;
+    this.defaultParams = apiConfig.deepseek.defaultParams;
     
     if (!this.apiKey) {
       console.warn('DeepSeek API key not found in environment variables');
@@ -65,17 +70,20 @@ export class DeepSeekAPI {
         prompt += `\n\nReference this dataset for analysis: ${JSON.stringify(request.dataset)}`;
       }
 
-      // Make API call to DeepSeek
+      // Make API call to DeepSeek using config parameters
       const response = await axios.post(
         `${this.apiUrl}/chat/completions`,
         {
-          model: "deepseek-chat", // Use appropriate model
+          model: this.models.chat, // Use configured model
           messages: [
             { role: "system", content: "You are an AI assistant analyzing form data." },
             { role: "user", content: prompt }
           ],
-          temperature: 0.5,
-          max_tokens: 1000
+          temperature: this.defaultParams.temperature,
+          max_tokens: this.defaultParams.max_tokens,
+          top_p: this.defaultParams.top_p,
+          frequency_penalty: this.defaultParams.frequency_penalty,
+          presence_penalty: this.defaultParams.presence_penalty
         },
         { headers: this.getHeaders() }
       );

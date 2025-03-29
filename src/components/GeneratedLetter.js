@@ -1,8 +1,30 @@
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import styles from '../styles/Form.module.css';
 
 export default function GeneratedLetter({ letter, onBack }) {
   const letterRef = useRef(null);
+  const [parsed, setParsed] = useState('');
+  
+  useEffect(() => {
+    console.log("GeneratedLetter component - received letter:", letter ? letter.substring(0, 100) + '...' : 'No letter content');
+    
+    // Try to format the letter in multiple ways to ensure it displays
+    if (letter) {
+      const formattedLetter = letter.replace(/\n/g, '<br>');
+      setParsed(formattedLetter);
+      
+      // Log letter length to confirm content is present
+      console.log("Letter length:", letter.length);
+      
+      // Ensure the letter content is visible in the DOM after render
+      setTimeout(() => {
+        if (letterRef.current) {
+          console.log("Letter element height:", letterRef.current.offsetHeight);
+          console.log("Letter element visibility:", window.getComputedStyle(letterRef.current).display);
+        }
+      }, 500);
+    }
+  }, [letter]);
 
   const handleCopy = () => {
     // Handle HTML content safely
@@ -110,11 +132,26 @@ export default function GeneratedLetter({ letter, onBack }) {
           <button onClick={onBack}>Back to Form</button>
         </div>
       </div>
-      <pre 
-        ref={letterRef} 
-        className={styles.letterContent}
-        dangerouslySetInnerHTML={{ __html: letter }}
-      />
+      
+      {letter ? (
+        <>
+          {/* Display letter content using pre with dangerouslySetInnerHTML */}
+          <pre 
+            ref={letterRef} 
+            className={styles.letterContent}
+            dangerouslySetInnerHTML={{ __html: letter }}
+          />
+          
+          {/* Fallback display method if the above doesn't render */}
+          {letterRef.current && letterRef.current.offsetHeight < 10 && (
+            <div className={styles.letterContent}>
+              <div dangerouslySetInnerHTML={{ __html: parsed }} />
+            </div>
+          )}
+        </>
+      ) : (
+        <div className={styles.noContent}>No letter content to display. Please go back and try again.</div>
+      )}
     </div>
   );
 } 

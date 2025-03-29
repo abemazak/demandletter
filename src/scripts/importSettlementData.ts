@@ -7,10 +7,10 @@ async function importData() {
       data: {
         caseType: data.caseType,
         injuryType: data.injuryType,
-        medicalBills: data.medicalBills,
-        settlementAmount: data.settlementAmount,
+        medicalBills: data.medicalExpenses,
+        settlementAmount: data.totalSettlement,
         jurisdiction: data.jurisdiction || null,
-        description: data.description || null
+        description: data.keyFactors.join(', ') || null
       }
     });
   }

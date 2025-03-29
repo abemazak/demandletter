@@ -18,6 +18,17 @@ import deepseekApi from '@/utils/deepseekApi';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    
+    // Log the incoming data for debugging
+    console.log('Received form data:', JSON.stringify({
+      hasPreExisting: body.hasPreExisting,
+      preExistingType: body.preExistingType,
+      preExistingConditions: body.preExistingConditions?.substring(0, 30) + '...',
+      preExistingDocumentation: body.preExistingDocumentation?.substring(0, 30) + '...',
+      // Log if parsed documents are included
+      hasParsedDocuments: !!body.documentData
+    }, null, 2));
+    
     const { 
       clientName, 
       accidentDate, 
@@ -34,9 +45,19 @@ export async function POST(request: Request) {
       jurisdiction = '',
       includeVisuals = false,
       hasPreExisting = false,
+      preExistingConditions = '',
+      preExistingType = '',
+      preExistingDocumentation = '',
       liabilityStrength = 'clear_fault',
-      calculateOnly = false
+      calculateOnly = false,
+      // Add document data parameter
+      documentData = null
     } = body;
+    
+    // Ensure hasPreExisting is definitely a boolean
+    const hasPreExistingBool = hasPreExisting === true || hasPreExisting === 'true';
+    
+    console.log('hasPreExisting after processing:', hasPreExistingBool);
     
     // Format numerical values
     const medicalBillsNum = parseFloat(medicalBills) || 0;
@@ -51,7 +72,7 @@ export async function POST(request: Request) {
       lostWagesNum,
       jurisdiction,
       insuranceCompany,
-      hasPreExisting
+      hasPreExistingBool
     );
     
     // If calculateOnly is true, just return the suggested amount
@@ -143,42 +164,67 @@ ${comparables}
       caseType,
       injuryType,
       jurisdiction,
-      hasPreExisting,
+      hasPreExisting: hasPreExistingBool,
+      preExistingConditions,
+      preExistingType,
+      preExistingDocumentation,
       liabilityStrength,
       jurisdictionInfo,
       carrierTactics,
-      similarCases
+      similarCases,
+      // Include parsed document data
+      documentData
     };
 
-    // Construct AI prompt for letter generation
-    const customPrompt = `
-You are a skilled personal injury attorney tasked with drafting a professional demand letter to an insurance company.
+    // Modify the custom prompt to include document data if available
+    let customPrompt = `Generate a professional demand letter for a ${caseType} case.
 
-Use the following case information to create a personalized, compelling demand letter:
-${JSON.stringify(formData, null, 2)}
+Client: ${clientName}
+Insurance Company: ${insuranceCompany}
+Date of Accident: ${accidentDate}
+Location: ${accidentLocation}
+Jurisdiction: ${jurisdiction}
 
-The letter should include:
-1. Standard header with date, insurance company, and claim details
-2. Introduction stating this is a formal demand
-3. Clear liability section addressing fault based on the ${liabilityStrength} situation
-4. Detailed injuries and medical treatment section
-5. Itemized damages section covering medical expenses, lost wages, and pain/suffering
-6. Case valuation and justification for the demand amount
-7. Formal demand statement with the amount of $${suggestedDemandAmount.toLocaleString()}
-8. Closing with attorney information
+Injury Description: ${injuryDescription}
+Medical Treatment: ${medicalTreatment}
+Medical Bills: $${medicalBillsNum.toLocaleString()}
+Lost Wages: $${lostWagesNum.toLocaleString()}
+Pre-existing Conditions: ${hasPreExistingBool ? 'Yes - ' + preExistingConditions : 'None'}
 
-IMPORTANT GUIDELINES:
-- Use professional legal language but remain concise and direct
-- Tailor arguments to the specific circumstances of this case
-- Reference the jurisdiction's laws if provided
-- Address any pre-existing conditions if applicable
-- Match the tone to the liability strength (more assertive for clear fault)
-- Format the letter properly with clear sections and headings
-- Include only factual information provided in the case details
-- Do not use placeholder text that requires manual filling in
+Demand Amount: $${suggestedDemandAmount.toLocaleString()}
 
-Format the letter with appropriate spacing between sections.
+Make it persuasive, well-structured, professional, and appropriate for the jurisdiction (${jurisdiction}).
+Include proper formatting with date, address blocks, subject line, salutation, and signature block.
 `;
+
+    // Add document reference section if documents were uploaded and parsed
+    if (documentData) {
+      customPrompt += `\n\nThe following documents have been uploaded and analyzed:\n`;
+      
+      Object.entries(documentData).forEach(([filename, docData]: [string, any]) => {
+        if (!docData.error) {
+          customPrompt += `- ${filename} (${docData.docType})\n`;
+        }
+      });
+      
+      customPrompt += `\nReference these documents appropriately in the demand letter to strengthen the case.`;
+    }
+
+    // Jurisdiction-specific information
+    if (jurisdictionInfo && jurisdictionInfo.length > 0) {
+      customPrompt += `\n\nJurisdiction-specific considerations for ${jurisdiction}:\n`;
+      jurisdictionInfo.forEach((info: any) => {
+        customPrompt += `- ${info}\n`;
+      });
+    }
+
+    // Insurance carrier tactics
+    if (carrierTactics && carrierTactics.length > 0) {
+      customPrompt += `\n\nConsider these known tactics for ${insuranceCompany}:\n`;
+      carrierTactics.forEach((tactic: any) => {
+        customPrompt += `- ${tactic}\n`;
+      });
+    }
 
     // Use DeepSeek API to generate the letter content
     const analysisResponse = await deepseekApi.analyzeData({
@@ -200,6 +246,17 @@ Format the letter with appropriate spacing between sections.
       letterContent += `\n\nSUPPORTING DOCUMENTATION\n\n${supportingDocs}`;
     }
 
+    // Make sure letterContent contains proper HTML formatting
+    if (letterContent) {
+      // Format the letter content for HTML display
+      letterContent = letterContent
+        .replace(/\n/g, '<br>')
+        .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
+        .replace(/  /g, '&nbsp;&nbsp;');
+      
+      console.log("Letter content length:", letterContent.length);
+    }
+
     // Save the generated letter to the database
     const savedLetter = await prisma.handyLaw.create({
       data: {
@@ -217,15 +274,24 @@ Format the letter with appropriate spacing between sections.
         injuryType,
         jurisdiction,
         includeVisuals,
-        hasPreExisting,
+        hasPreExisting: hasPreExistingBool,
+        // Type assertion to avoid TypeScript error
+        ...(hasPreExistingBool ? {
+          preExistingConditions,
+          preExistingType,
+          preExistingDocumentation,
+        } : {}),
         liabilityStrength,
-        letterContent
-      }
+        letterContent,
+        // Store information about uploaded documents
+        hasUploadedDocuments: !!documentData
+      } as any // Use 'any' type to bypass type checking for this object
     });
 
     return NextResponse.json({ 
       success: true, 
       letterId: savedLetter.id,
+      letter: letterContent,
       letterContent,
       suggestedDemandAmount 
     });

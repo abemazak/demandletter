@@ -86,6 +86,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<TabType>(TabType.Generator);
 
   const handleLetterGenerated = (letter: string) => {
+    console.log("Home component - received letter:", letter ? letter.substring(0, 100) + '...' : 'No letter content');
     setGeneratedLetter(letter);
   };
 

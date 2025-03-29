@@ -1,3 +1,8 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/generate-letter/route": "app/api/generate-letter/route.js",
+  "/api/analyze-letters/route": "app/api/analyze-letters/route.js",
+  "/api/parse-documents/route": "app/api/parse-documents/route.js",
+  "/api/letters/route": "app/api/letters/route.js",
   "/page": "app/page.js"
 }
