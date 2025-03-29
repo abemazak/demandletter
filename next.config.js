@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
+  swcMinify: process.env.NODE_ENV === 'development' ? false : true,
   optimizeFonts: false,
   experimental: {
     optimizeCss: {
@@ -17,6 +17,10 @@ const nextConfig = {
       poll: 1000,
       aggregateTimeout: 300,
     }
+    
+    // Improve cross-platform compatibility
+    config.resolve.symlinks = false;
+    
     return config
   },
   // Add any other necessary configuration options

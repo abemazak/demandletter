@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node -e \"try { require('fs').rmSync('./node_modules/.cache', { recursive: true, force: true }); console.log('Cache cleared!'); } catch (e) { console.log(e); }\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -24,7 +25,6 @@
     "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "@next/swc-win32-x64-msvc": "14.1.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
